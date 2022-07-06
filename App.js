@@ -1,39 +1,72 @@
 import * as React from 'react';
-import { Button, View, Text } from 'react-native';
+import { Button, View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import SRadd from './Pantallas/SRadd';
+
+
+const styles = StyleSheet.create({
+  Boton: {
+    margin: 10,
+    minWidth: "80%",
+    textAlign: "center",
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
 function HomeScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+    <View
+    style={styles.container} >
+
+      <View  style={styles.Boton}>
       <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
+        title="Registrar Datos"
+        color="#2f074a"
+        onPress={() => navigation.navigate('Agregar')}
       />
+      </View>
+
+      <View  style={styles.Boton}>
+      <Button
+        title="Ver Información"
+        color="#2f074a"
+        
+      />
+      </View>
+
     </View>
   );
 }
 
-function DetailsScreen() {
+
+function AddScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-    </View>
+    <SRadd/>
   );
 }
+
+
+
+
 
 const Stack = createNativeStackNavigator();
 
-function App() {
+function SRMain() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
+
+        <Stack.Screen name="Agregar" component={AddScreen} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-export default App;
+export default SRMain;
