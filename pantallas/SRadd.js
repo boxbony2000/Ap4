@@ -12,8 +12,19 @@ const SRadd = () => {
         },
     });
 
+    const [elementos, setelement]=useState({
+        producto:'',
+        precio:'',
+        existencia:'',
+        categoria:''
+    })
+
+    const capturar =(atrib,valor)=>{
+        setelement({...elemtentos,[atrib]:valor})
+    }
+
     return (
-        <View style={styles.Contenedor}>
+        <ScrollView style={styles.Contenedor}>
             
             <Text>
             Nombre:
@@ -38,7 +49,7 @@ const SRadd = () => {
             
             
         
-        </View>
+        </ScrollView>
     )
 }
 
