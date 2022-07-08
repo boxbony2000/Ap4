@@ -3,7 +3,7 @@ import { Button, View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import SRadd from './Pantallas/SRadd';
+import SRadd from './pantallas/SRadd';
 
 
 const styles = StyleSheet.create({
@@ -26,7 +26,7 @@ function HomeScreen({ navigation }) {
 
       <View  style={styles.Boton}>
       <Button
-        title="Registrar Datos"
+        title="Agregar Prendas"
         color="#2f074a"
         onPress={() => navigation.navigate('Agregar')}
       />
