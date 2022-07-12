@@ -4,7 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SRadd from './pantallas/SRadd';
-import SRadd from './pantallas/SRread';
+import SRread from './pantallas/SRread';
+import SRupdate from './pantallas/SRupdate';
+import SRdelete from './pantallas/SRdelete';
 
 
 const styles = StyleSheet.create({
@@ -37,7 +39,21 @@ function HomeScreen({ navigation }) {
       <Button
         title="Ver Información"
         color="#2f074a"
-        onPress={() => navigation.navigate('ver')}
+        onPress={() => navigation.navigate('Ver')}
+      />
+      </View>
+      <View  style={styles.Boton}>
+      <Button
+        title="Actualizar Prenda"
+        color="#2f074a"
+        onPress={() => navigation.navigate('Actualizar')}
+      />
+      </View>
+      <View  style={styles.Boton}>
+      <Button
+        title="Eliminar Prendas"
+        color="#2f074a"
+        onPress={() => navigation.navigate('Eliminar')}
       />
       </View>
 
@@ -57,6 +73,16 @@ function ReadScreen({ navigation }) {
     <SRread/>
   );
 }
+function UpdateScreen({ navigation }) {
+  return (
+    <SRupdate/>
+  );
+}
+function DeleteScreen({ navigation }) {
+  return (
+    <SRdelete/>
+  );
+}
 
 
 
@@ -71,7 +97,9 @@ function SRMain() {
         <Stack.Screen name="Home" component={HomeScreen} />
 
         <Stack.Screen name="Agregar" component={AddScreen} />
-        <Stack.Screen name="ver" component={ReadScreen} />
+        <Stack.Screen name="Ver" component={ReadScreen} />
+        <Stack.Screen name="Actualizar" component={UpdateScreen} />
+        <Stack.Screen name="Eliminar" component={DeleteScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>
