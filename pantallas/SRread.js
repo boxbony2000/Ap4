@@ -1,9 +1,9 @@
 import React from 'react';
 import {useState} from 'react'
-import {ScrollView, Button, View, StyleSheet, TextInput, Text } from 'react-native';
+import {ScrollView, Button, View, StyleSheet, Text } from 'react-native';
 import { db } from '../server/conexion';
-import { collection, addDoc } from "firebase/firestore";
-import { TouchableOpacity } from 'react-native-web';
+import { collection, getDocs } from "firebase/firestore";
+import { async } from '@firebase/util';
 
 const SRread = () => {
 
@@ -13,80 +13,71 @@ const SRread = () => {
             backgroundColor: '#8c0401',
         },
         input: {
-          height: 40,
-          margin: 12,
-          borderWidth: 1,
-          padding: 20,
-          color: '#000000',
-          backgroundColor: '#69d4db'
+            height: 40,
+            margin: 12,
+            borderWidth: 1,
+            padding: 20,
+            color: '#000000',
+            backgroundColor: '#69d4db'
         },
         Button: {
             margin: 10,
             minWidth: "40%",
             textAlign: "center",
             color: '#fff'
-          },
-      });
+        },
+        sec: {
+            textAlign: 'center',
+            fontWeight: 'bold',
+        },
+        Titulo: {
+            fontWeight: 'bold',
+            fontSize: 30,
+        },
+        Subtitulo: {
+            fontSize: 25,
+        },
+    });
 
 
-      const [elementos, setelement]=useState({
-        nombre:'',
-        talla:'',
-        color:'',
-        precio:'',
-        existencia:'',
-        categoria:''
-      })
+    const [elementos, setelementos]=useState([])
 
-      const capturar =(atrib,valor) =>{
-        setelement({...elementos,[atrib]:valor})
-        console.log(elementos)
-        }
+    async function leer(){
+        const querySnapshot = await getDocs(collection(db, "nombres"));
+        const articulos=[];
+            querySnapshot.forEach((doc) => {
+        const {nombre, talla, color, precio, existencia, categoria}=doc.data()
 
+        articulos.push({
+            Id:doc.id,
+            nombre, 
+            talla, 
+            color, 
+            precio, 
+            existencia, 
+            categoria
+        })
+    })
+        setelementos(articulos)
 
-      async function agregar(){
-          if(elementos.nombre === '' | elementos.talla === ''
-             | elementos.color === '' | elementos.precio === ''
-             | elementos.existencia === '' | elementos.categoria === ''){
-          alert('Para agregar una prenda llena todos los campos que estan vacios')
-          }else{
-          
-            try {
+    }
 
-              const precio = parseFloat(elementos.precio)
-              const existencia= parseInt(elementos.existencia)
-
-              await addDoc(collection(db, "nombres"), {
-                Nombre:elementos.nombre,
-                Talla:elementos.talla,
-                Color:elementos.color,
-                Precio:precio,
-                Existencia:existencia,
-                Categoria:elementos.categoria
-              });
-              alert('Se agrego correctamente la prenda')
-            } catch (e) {
-              alert("Error al agregar la prenda: ", e);
-            }
-            
-          }
-       
-        }
 
     return (
         <ScrollView style={styles.sec}>
             <Text  style={styles.Titulo} > Ver Información</Text>
-            <Button title='Leer' onPress={() => Leer()}>Ver Prendas</Button>
+            <Button title="Leer" onPress={() =>leer()}>Ver Prendas</Button>
             {
-                articulos.map(articulo=>{
+                elementos.map(elemento=>{
                     return(
-                        <TouchableOpacity
-                        key={articulo.id}>
-                        <View styles={styles.container} >
-                            <Text style={styles.Titulo}>{articulo.Producto}</Text>
-                            <Text style={styles.Subtitulo}>${articulo.Precio}</Text>
+                        <View style={styles.Contenedor}key={elemento.Id} >
+                            <Text style={styles.Titulo}>nombre:{elemento.nombre}</Text>
+                            <Text style={styles.Subtitulo}>talla:{elemento.talla}</Text>
+                            <Text style={styles.Subtitulo}>color:{elemento.color}</Text>
+                            <Text style={styles.Subtitulo}>precio:${elemento.precio}</Text>
+                            <Text style={styles.Subtitulo}>existencia:{elemento.existencia}</Text>
+                            <Text style={styles.Subtitulo}>categoria:{elemento.categoria}</Text>
                         </View>
-                        </TouchableOpacity>
                     );
                 })
             }
