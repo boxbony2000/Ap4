@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState} from 'react'
-import {ScrollView, Button, View, StyleSheet, TouchableOpacity, } from 'react-native';
-import { db } from '../server/conexion';
+import {ScrollView, Button, View, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
+import { db } from '../Server/Conexion';
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 const SRupdate = () => {
@@ -9,81 +9,161 @@ const SRupdate = () => {
     const styles = StyleSheet.create({
         Contenedor:{
             margin: 10,
-            backgroundColor: '#8c0401',
+            backgroundColor: '#0e0e12',
         },
-        input: {
-            height: 40,
-            margin: 12,
-            borderWidth: 1,
-            padding: 20,
-            color: '#000000',
-            backgroundColor: '#69d4db'
-        },
-        Button: {
-            margin: 10,
-            minWidth: "40%",
-            textAlign: "center",
-            color: '#fff'
-        },
-        sec: {
-            textAlign: 'center',
+        Sec:{
+            textAlign: 'center', 
             fontWeight: 'bold',
         },
         Titulo: {
             fontWeight: 'bold',
             fontSize: 30,
+            color: '#f51818'
+            
         },
-        Subtitulo: {
+        Subtitulo:{
             fontSize: 25,
+            color: '#ffffff'
         },
-    });
+        Cajas:{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        input: {
+            height: 40,
+            margin: 12,
+            borderWidth: 1,
+            padding: 10,
+          },
+      });
 
 
     const [elementos, setelementos]=useState([])
+    const [nombres, setnombres]=useState({
+        nombre:'',
+        talla:'',
+        color:'',
+        precio:'',
+        existencia:'',
+        categoria:''
+      })
+
+    const capturar =(atrib,valor) =>{
+        setnombres({...nombres,[atrib]:valor})
+    }  
+
 
     async function leer(){
         const querySnapshot = await getDocs(collection(db, "nombres"));
         const articulos=[];
             querySnapshot.forEach((doc) => {
-        const {nombre, talla, color, precio, existencia, categoria}=doc.data()
-
-        articulos.push({
-            Id:doc.id,
-            nombre, 
-            talla, 
-            color, 
-            precio, 
-            existencia, 
-            categoria
-        })
+            const {Nombre, Talla, Color, Precio, Existencia, Categoria}=doc.data()
+    
+            articulos.push({
+                Id:doc.id,
+                Nombre,
+                Talla,
+                Color,
+                Precio,
+                Existencia,
+                Categoria
+            })
     })
         setelementos(articulos)
-
     }
 
+    async function recuperar(iden){
+        const docRef = doc(db, "nombres", iden);
+        const docSnap = await getDoc(docRef);
+    
+        if (docSnap.exists()) {
+            const txtnombre = docSnap.data().Nombre;
+            const txttalla = docSnap.data().Talla;
+            const txtcolor = docSnap.data().Color;
+            const txtprecio = docSnap.data().Precio;
+            const txtexi = docSnap.data().Existencia;
+            const txtcate = docSnap.data().Categoria;
+    
+        setnombres({...nombres,['nombre']:txtnombre, ['talla']:txttalla, ['color']:txtcolor, ['precio']:txtprecio, ['existencia']:txtexi, ['categoria']:txtcate})
+        } else {
+          alert('Error al ingresar la prenda')
+        }
+      }
 
     return (
-        <ScrollView style={styles.sec}>
-            <Text  style={styles.Titulo} > Ver Información</Text>
-            <Button title="Leer" onPress={() =>leer()}>Ver Prendas</Button>
-            {
-                elementos.map(elemento=>{
-                    return(
-                        <TouchableOpacity key={elemento.Id}>
-                            <View style={styles.Contenedor} >
-                            <Text style={styles.Titulo}>nombre:{elemento.nombre}</Text>
-                            <Text style={styles.Subtitulo}>talla:{elemento.talla}</Text>
-                            <Text style={styles.Subtitulo}>color:{elemento.color}</Text>
-                            <Text style={styles.Subtitulo}>precio:${elemento.precio}</Text>
-                            <Text style={styles.Subtitulo}>existencia:{elemento.existencia}</Text>
-                            <Text style={styles.Subtitulo}>categoria:{elemento.categoria}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    );
-                })
-            }
+        <ScrollView style={styles.Sec}>
+        <Text  style={styles.Titulo} >Boutique Online</Text>
+
+        <View style={styles.Cajas}>
+
+        <TextInput
+        style={styles.input}
+        placeholder="Nombre"
+        value={nombres.nombre}
+        onChangeText={(value)=>capturar('nombre',value)}
+        />
+
+        <TextInput
+        style={styles.input}
+        placeholder="Talla"
+        value={nombres.talla}
+        onChangeText={(value)=>capturar('talla',value)}
+        />
+
+        <TextInput
+        style={styles.input}
+        placeholder="Color"
+        value={nombres.color}
+        onChangeText={(value)=>capturar('color',value)}
+        />
+
+        <TextInput
+        style={styles.input}
+        placeholder="Precio"
+        value={nombres.precio}
+        onChangeText={(value)=>capturar('precio',value)}
+        />
+
+        <TextInput
+        style={styles.input}
+        placeholder="Existencia"
+        value={nombres.existencia}
+        onChangeText={(value)=>capturar('existencia',value)}
+        />
+
+        <TextInput
+        style={styles.input}
+        placeholder="Categoria"
+        value={nombres.categoria}
+        onChangeText={(value)=>capturar('categoria',value)}
+        />
+
+        </View>
+
+        <Button title="Catalogo"  onPress={() =>leer()}>Catalogo</Button>
+        {
+        elementos.map(elemento=>{
+            return(
+                <TouchableOpacity 
+                key={elemento.Id}
+                onPress={() => recuperar(elemento.Id)}
+                >
+                <View style={styles.Contenedor} >
+                <Text style={styles.Titulo}>{elemento.Nombre}</Text>
+                <Text style={styles.Subtitulo}>Talla:{elemento.Talla}</Text>
+                <Text style={styles.Subtitulo}>Color:{elemento.Color}</Text>
+                <Text style={styles.Subtitulo}>Precio:${elemento.Precio}</Text>
+                <Text style={styles.Subtitulo}>Existencia:{elemento.Existencia} piezas</Text>
+                <Text style={styles.Subtitulo}>Categoria:{elemento.Categoria}</Text>
+                </View>
+                
+                </TouchableOpacity  >
+            );
+        })
+        }
         </ScrollView>
-        )
+    )
 }
 
 export default SRupdate

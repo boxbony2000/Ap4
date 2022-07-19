@@ -29,7 +29,7 @@ function HomeScreen({ navigation }) {
 
       <View  style={styles.Boton}>
       <Button
-        title="Agregar Prendas"
+        title="AGREGAR PRENDAS"
         color="#2f074a"
         onPress={() => navigation.navigate('Agregar')}
       />
@@ -37,21 +37,21 @@ function HomeScreen({ navigation }) {
 
       <View  style={styles.Boton}>
       <Button
-        title="Ver Información"
+        title="VER PRENDAS"
         color="#2f074a"
         onPress={() => navigation.navigate('Ver')}
       />
       </View>
       <View  style={styles.Boton}>
       <Button
-        title="Actualizar Prenda"
+        title="ACTUALIZAR PRENDAS"
         color="#2f074a"
         onPress={() => navigation.navigate('Actualizar')}
       />
       </View>
       <View  style={styles.Boton}>
       <Button
-        title="Eliminar Prendas"
+        title="ELIMINAR PRENDAS"
         color="#2f074a"
         onPress={() => navigation.navigate('Eliminar')}
       />
