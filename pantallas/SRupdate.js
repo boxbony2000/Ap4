@@ -2,7 +2,7 @@ import React from 'react';
 import {useState} from 'react'
 import {ScrollView, Button, View, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import { db } from '../Server/Conexion';
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
 
 const SRupdate = () => {
 
@@ -36,11 +36,19 @@ const SRupdate = () => {
             borderWidth: 1,
             padding: 10,
           },
+          boton:{
+            margin: 10,
+            minWidth: "80%",
+            justifyContent:'center',
+            alignItems:'center',
+
+        },
       });
 
 
     const [elementos, setelementos]=useState([])
     const [nombres, setnombres]=useState({
+        id: '',
         nombre:'',
         talla:'',
         color:'',
@@ -85,11 +93,26 @@ const SRupdate = () => {
             const txtexi = docSnap.data().Existencia;
             const txtcate = docSnap.data().Categoria;
     
-        setnombres({...nombres,['nombre']:txtnombre, ['talla']:txttalla, ['color']:txtcolor, ['precio']:txtprecio, ['existencia']:txtexi, ['categoria']:txtcate})
+        setnombres({...nombres,['id']:iden, ['nombre']:txtnombre, ['talla']:txttalla, ['color']:txtcolor, ['precio']:txtprecio, ['existencia']:txtexi, ['categoria']:txtcate})
         } else {
           alert('Error al ingresar la prenda')
         }
       }
+
+      async function actualizar(){
+        const prodRef = doc(db, "nombres", nombres.id);
+        await updateDoc(prodRef, {
+                Nombre:nombres.nombre,
+                Talla:nombres.talla,
+                Color:nombres.color,
+                Precio:nombres.precio,
+                Existencia:nombres.existencia,
+                Categoria:nombres.categoria
+          });
+          
+        alert('La prenda se ah actualizado correctamente');
+        leer();
+    }
 
     return (
         <ScrollView style={styles.Sec}>
@@ -139,6 +162,10 @@ const SRupdate = () => {
         onChangeText={(value)=>capturar('categoria',value)}
         />
 
+        </View>
+
+        <View style={styles.boton}>
+        <Button color="#de0c09" title="Actualizar"  onPress={() =>actualizar()}>Actualizar Productos</Button>
         </View>
 
         <Button title="Catalogo"  onPress={() =>leer()}>Catalogo</Button>

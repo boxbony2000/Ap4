@@ -16,15 +16,12 @@ const SRadd = () => {
           height: 40,
           margin: 12,
           borderWidth: 1,
-          padding: 20,
-          color: '#000000',
-          backgroundColor: '#69d4db'
+          padding: 20
         },
         Button: {
             margin: 10,
             minWidth: "40%",
             textAlign: "center",
-            color: '#fff'
           },
       });
 
@@ -115,7 +112,7 @@ const SRadd = () => {
 <View  style={styles.Button}>
     <Button
         title="Agregar" 
-        color="#820913"
+        color="#de0c09"
         onPress={()=>agregar()}>Agregar
     </Button>
 </View>
